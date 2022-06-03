@@ -1,5 +1,3 @@
-package DB;
-
 import java.sql.*;
 import java.util.*;
 import java.awt.*;
@@ -23,8 +21,8 @@ public class updateAgency extends JFrame implements ActionListener{
 	private int NUMBER_COLUMN = 0;
 	
 	// 보기 & 수정 버튼
-	private JButton Show_Button = new JButton("보기");
-	private JButton Update_Button = new JButton("수정");
+	private RoundedButton Show_Button = new RoundedButton("보기");
+	private RoundedButton Update_Button = new RoundedButton("수정");
 	Container me = this;
 	
 	JPanel panel;
@@ -36,6 +34,10 @@ public class updateAgency extends JFrame implements ActionListener{
 	int count = 0;
 	
 	public updateAgency() {
+		Font f1 = new Font("아임크리수진",Font.PLAIN, 13);
+		Setlabel_1.setFont(f1);
+		Setlabel_2.setFont(f1);
+		
 		// 버튼 패널
 		JPanel ShowAllPanel = new JPanel();
 		ShowAllPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -73,9 +75,9 @@ public class updateAgency extends JFrame implements ActionListener{
 		try {
 			Class.forName("com.mysql.jdbc.Driver");  // JDBC 드라이버 연결
 			
-			String user = "db2022team11";
-			String pwd = "db2022team11";
-			String url = "jdbc:mysql://localhost:3306/db2022team11";
+			String user = "DB2022team11";
+			String pwd = "DB2022team11";
+			String url = "jdbc:mysql://localhost:3306/DB2022team11";
 					
 			conn = DriverManager.getConnection(url, user, pwd);
 			System.out.println("정상적으로 연결되었습니다.");
@@ -186,10 +188,10 @@ public class updateAgency extends JFrame implements ActionListener{
 					}
 					for(int i=0; i<update_agency_id.size(); i++) {
 						// update문
+						conn.setAutoCommit(false);  // 트랜잭션
 						String updateStmt = "UPDATE DB2022_AGENCY SET agency_name = ?, agency_number = ? WHERE agency_id = ?";
 						PreparedStatement p = conn.prepareStatement(updateStmt);
 						p.clearParameters();
-						conn.setAutoCommit(false);  // 트랜잭션
 						String updateName = setName.getText();
 						String updateNumber = setNumber.getText();
 						p.setString(1, updateName);
@@ -198,9 +200,7 @@ public class updateAgency extends JFrame implements ActionListener{
 						p.executeUpdate();
 						conn.commit();
 					}
-				} 
-
-				
+				}
 			} catch(SQLException sqle) {
 				sqle.printStackTrace();
 					try {

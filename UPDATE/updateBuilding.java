@@ -5,7 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class updateSale extends JFrame implements ActionListener{
+
+public class updateBuilding extends JFrame implements ActionListener{
 	public Connection conn;
 	public Statement s;
 	public ResultSet r;
@@ -16,9 +17,8 @@ public class updateSale extends JFrame implements ActionListener{
 	private DefaultTableModel model;
 	private static final int BOOLEAN_COLUMN = 0;
 	private int ID_COLUMN = 0;
-	private int TYPE_COLUMN = 0;
-	private int PRICE_COLUMN = 0;
-	private int DEPOSIT_COLUMN = 0;
+	private int NAME_COLUMN = 0;
+	private int NUMBER_COLUMN = 0;
 	
 	// 보기 & 수정 버튼
 	private RoundedButton Show_Button = new RoundedButton("보기");
@@ -27,35 +27,42 @@ public class updateSale extends JFrame implements ActionListener{
 	
 	JPanel panel;
 	JScrollPane ScPane;
-	private JLabel Setlabel_1 = new JLabel("새로운 매물 유형: ");
-	private JLabel Setlabel_2 = new JLabel("새로운 비용: ");
-	private JLabel Setlabel_3 = new JLabel("새로운 보증금: ");
-	private JTextField setType = new JTextField(10);
-	private JTextField setPrice = new JTextField(10);
-	private JTextField setDeposit = new JTextField(10);
+	private JLabel Setlabel_1 = new JLabel("새로운 이름: ");
+	private JLabel Setlabel_2 = new JLabel("새로운 건물 유형: ");
+	private JTextField setName = new JTextField(10);
+	private JRadioButton rd1, rd2, rd3, rd4;
 	int count = 0;
 	
-	public updateSale() {    
+	public updateBuilding() {
 		Font f1 = new Font("아임크리수진",Font.PLAIN, 13);
 		Setlabel_1.setFont(f1);
 		Setlabel_2.setFont(f1);
-		Setlabel_3.setFont(f1);
 		
+		rd1 = new JRadioButton("아파트"); 	
+        rd2 = new JRadioButton("단독주택");	
+        rd3 = new JRadioButton("빌라");		
+        rd4 = new JRadioButton("오피스텔");	
+        // 라디오 버튼을 그룹화 하기위한 객체 생성
+        ButtonGroup groupRd = new ButtonGroup();
+        groupRd.add(rd1);
+        groupRd.add(rd2);
+        groupRd.add(rd3);
+        groupRd.add(rd4);
+        
 		// 버튼 패널
 		JPanel ShowAllPanel = new JPanel();
 		ShowAllPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		ShowAllPanel.add(Update_Button);
 		ShowAllPanel.add(Show_Button);
 		
-		// 매물 update 패널
+		// 빌딩 update 패널
 		JPanel UpdatePanel = new JPanel();
 		UpdatePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		UpdatePanel.add(Setlabel_1);
-		UpdatePanel.add(setType);
+		UpdatePanel.add(setName);
+		UpdatePanel.add(new JLabel("  "));
 		UpdatePanel.add(Setlabel_2);
-		UpdatePanel.add(setPrice);
-		UpdatePanel.add(Setlabel_3);
-		UpdatePanel.add(setDeposit);
+		UpdatePanel.add(rd1);	UpdatePanel.add(rd2);	UpdatePanel.add(rd3);	UpdatePanel.add(rd4);
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new FlowLayout());
@@ -68,7 +75,7 @@ public class updateSale extends JFrame implements ActionListener{
 		Show_Button.addActionListener(this);
 		Update_Button.addActionListener(this);
 		
-		setTitle("매물 수정");
+		setTitle("부동산 수정");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700, 700);
 		setLocationRelativeTo(null);
@@ -104,15 +111,12 @@ public class updateSale extends JFrame implements ActionListener{
 		if(e.getSource() == Show_Button) {
 			Head.clear();
 			Head.add("선택");
-			Head.add("Pid");
-			Head.add("rent_type");
-			Head.add("price");
-			Head.add("deposit");
-			Head.add("sale_date");
-			Head.add("address");
-			
-			// select문으로 DB2022_SALE 테이블 전체 보기
-			String stmt = "SELECT * FROM DB2022_SALE";
+			Head.add("building_id");
+			Head.add("building_name");
+			Head.add("building_type");
+		 
+			// select문으로 DB2022_BUILDING 테이블 전체 보기
+			String stmt = "SELECT * FROM DB2022_BUILDING";
 			
 			// DefaultTablemodel 및 JTable 생성(update 위해 해당 열 저장)
 			model = new DefaultTableModel(Head, 0) {
@@ -126,15 +130,13 @@ public class updateSale extends JFrame implements ActionListener{
 				}
 			};
 			for(int i=0; i<Head.size(); i++) {
-				if(Head.get(i) == "Pid") {
+				if(Head.get(i) == "building_id") {
 					ID_COLUMN = i;
 				}
-				else if(Head.get(i) == "rent_type") {
-					TYPE_COLUMN = i;
-				}else if(Head.get(i) == "price") {
-					PRICE_COLUMN = i;
-				}else if(Head.get(i) == "deposit") {
-					DEPOSIT_COLUMN = i;
+				else if(Head.get(i) == "building_name") {
+					NAME_COLUMN = i;
+				} else if(Head.get(i) == "building_type") {
+					NUMBER_COLUMN = i;
 				}
 			}
 			// JTable은 행의 1열의 Boolean 값을 '선택'열에서 체크박스로 나타내기 위해 Boolean.class 반환
@@ -154,13 +156,10 @@ public class updateSale extends JFrame implements ActionListener{
 				r = s.executeQuery(stmt);
 
 				while(r.next()) {
-					String[] input = new String[7];
-					input[1] = r.getString("Pid");
-					input[2] = r.getString("rent_type");
-					input[3] = Integer.toString(r.getInt("price"));
-					input[4] = Integer.toString(r.getInt("deposit"));
-					input[5] = r.getString("sale_date");
-					input[6] = r.getString("address");
+					String[] input = new String[5];
+					input[1] = r.getString("building_id");
+					input[2] = r.getString("building_name");
+					input[3] = r.getString("building_type");
 					model.addRow(input);
 				}
 				
@@ -180,43 +179,57 @@ public class updateSale extends JFrame implements ActionListener{
 		
 		
 		// UPDATE
-		// for, if문을 통해 '선택' 체크박스가 체크된 행의 sale_id를 vector에 더함
+		// for, if문을 통해 '선택' 체크박스가 체크된 행의 building_id를 vector에 더함
 		if(e.getSource() == Update_Button) {
-			Vector<String> update_sale_id = new Vector<String>();
+			Vector<String> update_building_id = new Vector<String>();
 			try {
-				String columnName_1 = model.getColumnName(2);  // 매물 유형
-				String columnName_2 = model.getColumnName(3);  // 비용
-				String columnName_3 = model.getColumnName(4);  // 보증금
-				if(columnName_1 == "rent_type" && columnName_2 == "price" && columnName_3 == "deposit") {
+				String columnName_1 = model.getColumnName(2);  // 건물 이름
+				String columnName_2 = model.getColumnName(3);  // 건물종류
+				if(columnName_1 == "building_name" && columnName_2 == "building_type") {
 					for(int i=0; i<table.getRowCount();i++){
 						// '선택' 체크박스가 체크되었을 경우 컬럼 값 가져옴
 						if(table.getValueAt(i, 0) == Boolean.TRUE) {
-							update_sale_id.add((String) table.getValueAt(i, 1));
-							String updateType = setType.getText();
-							int updatePrice = Integer.parseInt(setPrice.getText());
-							int updateDeposit = Integer.parseInt(setDeposit.getText());
-							table.setValueAt(updateType, i, TYPE_COLUMN);
-							table.setValueAt(updatePrice, i, PRICE_COLUMN);
-							table.setValueAt(updateDeposit, i, DEPOSIT_COLUMN);
+							update_building_id.add((String) table.getValueAt(i, 1));
+							String updateName = setName.getText();
+							String updateType = ""; 
+							if(rd1.isSelected())
+								updateType = rd1.getText();
+				            else if(rd2.isSelected())
+				            	updateType = rd2.getText();
+				            else if(rd3.isSelected())
+				            	updateType = rd3.getText();
+				            else if(rd4.isSelected())
+				            	updateType = rd4.getText();
+
+							table.setValueAt(updateName,  i,  NAME_COLUMN);
+							table.setValueAt(updateType,  i,  NUMBER_COLUMN);
 						}
 					}
-					for(int i=0; i<update_sale_id.size(); i++) {
+					for(int i=0; i<update_building_id.size(); i++) {
 						// update문
-						conn.setAutoCommit(false);  // 트랜잭션
-						String updateStmt = "UPDATE DB2022_SALE SET rent_type = ?, price = ?, deposit = ? WHERE Pid = ?";
+						String updateStmt = "UPDATE DB2022_BUILDING SET building_name = ?, building_type = ? WHERE building_id = ?";
 						PreparedStatement p = conn.prepareStatement(updateStmt);
 						p.clearParameters();
-						String updateType = setType.getText();
-						int updatePrice = Integer.parseInt(setPrice.getText());
-						int updateDeposit = Integer.parseInt(setDeposit.getText());
-						p.setString(1, updateType);
-						p.setInt(2, updatePrice);
-						p.setInt(3, updateDeposit);
-						p.setString(4, String.valueOf(update_sale_id.get(i)));
+						conn.setAutoCommit(false);  // 트랜잭션
+						String updateName = setName.getText();
+						String updateType = " "; 
+						if(rd1.isSelected())
+							updateType = rd1.getText();
+			            else if(rd2.isSelected())
+			            	updateType = rd2.getText();
+			            else if(rd3.isSelected())
+			            	updateType = rd3.getText();
+			            else if(rd4.isSelected())
+			            	updateType = rd4.getText();
+						p.setString(1, updateName);
+						p.setString(2, updateType);
+						p.setString(3, String.valueOf(update_building_id.get(i)));
 						p.executeUpdate();
 						conn.commit();
 					}
-				} 			
+				} 
+
+				
 			} catch(SQLException sqle) {
 				sqle.printStackTrace();
 					try {
@@ -237,6 +250,6 @@ public class updateSale extends JFrame implements ActionListener{
 	}	
 	
 	public static void main(String[] args) {
-		new updateSale();
+		new updateBuilding();
 	}
 }
