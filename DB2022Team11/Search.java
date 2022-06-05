@@ -131,7 +131,7 @@ public class Search extends JFrame{
 		}
 		
 		try {   Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/DB2022team11", "DB2022team11", "DB2022team11");
+				"jdbc:mysql://localhost:3306/DB2022Team11", "DB2022Team11", "DB2022Team11");
 				
 		PreparedStatement pstmt = conn.prepareStatement(
 				"select rent_type, price, deposit, building_name, building_type, sale_date, address "

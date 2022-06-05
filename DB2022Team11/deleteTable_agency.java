@@ -12,10 +12,10 @@ import javax.swing.table.TableModel;
 
 public class deleteTable_agency extends JFrame implements ActionListener {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/DB2022team11";
+	static final String DB_URL = "jdbc:mysql://localhost:3306/DB2022Team11";
 	
-	static final String USER = "DB2022team11";
-	static final String PASS = "DB2022team11";
+	static final String USER = "DB2022Team11";
+	static final String PASS = "DB2022Team11";
 	
 	public Connection conn;
 	public Statement s;
