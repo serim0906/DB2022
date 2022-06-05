@@ -12,10 +12,10 @@ import javax.swing.table.TableModel;
 
 public class showTable_user extends JFrame implements ActionListener {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/db2022team11";
+	static final String DB_URL = "jdbc:mysql://localhost:3306/DB2022team11";
 	
-	static final String USER = "db2022team11";
-	static final String PASS = "db2022team11";
+	static final String USER = "DB2022team11";
+	static final String PASS = "DB2022team11";
 	
 	public Connection conn;
 	public Statement s;

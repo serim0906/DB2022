@@ -82,8 +82,8 @@ public class updateSale extends JFrame implements ActionListener{
 		try {
 			Class.forName("com.mysql.jdbc.Driver");  // JDBC 드라이버 연결
 			
-			String user = "db2022team11";
-			String pwd = "db2022team11";
+			String user = "DB2022team11";
+			String pwd = "DB2022team11";
 			String url = "jdbc:mysql://localhost:3306/DB2022team11";
 					
 			conn = DriverManager.getConnection(url, user, pwd);

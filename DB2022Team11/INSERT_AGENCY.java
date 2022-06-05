@@ -101,8 +101,8 @@ public class INSERT_AGENCY extends JFrame implements ActionListener{
 	    	 String url = "jdbc:mysql://localhost:3306/DB2022Team11";
 	       	 
 	        //Database user, password
-	        String  user = "db2022team11";
-	        String password ="db2022team11";
+	        String  user = "DB2022team11";
+	        String password ="DB2022team11";
 	        	
 	        conn = DriverManager.getConnection(url, user, password);
 	        System.out.println("Insert_AGENCY Successfully Connection!");	//연결 확인 메세지
